@@ -1,0 +1,53 @@
+@import "tailwindcss";
+
+/* ---- PlanHub brand tokens (Tailwind v4 @theme → utilities like bg-navy, text-teal) ---- */
+@theme {
+  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    system-ui, sans-serif;
+
+  /* dark navy sidebar / top bar */
+  --color-navy: #0f2233;
+  --color-navy-700: #16293a;
+  --color-navy-600: #21384b;
+  --color-navy-500: #33506a;
+
+  /* primary teal / green */
+  --color-teal: #12a37f;
+  --color-teal-dark: #0e8b6c;
+  --color-teal-100: #cdeee3;
+  --color-teal-50: #e7f6f1;
+
+  /* coral / red — due dates, destructive */
+  --color-coral: #e0533a;
+  --color-coral-50: #fdece9;
+
+  /* gold / orange — pricing, upsell, previews */
+  --color-gold: #ef9f43;
+  --color-gold-100: #fbe7c8;
+  --color-gold-50: #fdf4e6;
+
+  /* neutrals */
+  --color-canvas: #f4f6f7;
+  --color-ink: #1f2b37;
+  --color-muted: #667586;
+  --color-line: #e6eaee;
+}
+
+@layer base {
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
+  body {
+    margin: 0;
+    font-family: var(--font-sans);
+    background: var(--color-canvas);
+    color: var(--color-ink);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  * {
+    box-sizing: border-box;
+  }
+}
