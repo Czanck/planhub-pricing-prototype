@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom'
 import { useDemoState } from '../context/DemoStateContext'
 import { Modal } from './Modal'
 import { FEATURED_PACK_ID, PACKS } from '../config/pricing'
-import { currency } from '../lib/format'
+import { currency, currency2 } from '../lib/format'
 import { daysUntil, formatDateLong } from '../lib/date'
 import { IconArrowRight, IconCalendar, IconCoin } from './icons'
 
@@ -65,7 +65,7 @@ export function ZeroBalanceModal({ onClose }: { onClose: () => void }) {
                   {featured.name} · {featured.credits} credits
                 </div>
                 <div className="text-sm text-muted">
-                  {currency(featured.price)} · {currency(featured.perUnit)}/unlock
+                  {currency(featured.price)} · {currency2(featured.perUnit)}/unlock
                 </div>
               </div>
               <button
