@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Navigate, useNavigate, useSearchParams } from 'react-router-dom'
 import { useDemoState } from '../context/DemoStateContext'
-import { PACKS, TIERS } from '../config/pricing'
+import { TIERS, TOPUPS } from '../config/pricing'
 import { currency } from '../lib/format'
 import { IconArrowRight, IconCheck } from '../components/icons'
 
@@ -14,18 +14,18 @@ export function PurchaseConfirm() {
   const [done, setDone] = useState(false)
 
   const tier = kind === 'tier' ? TIERS.find((t) => t.id === id) : undefined
-  const pack = kind === 'pack' ? PACKS.find((p) => p.id === id) : undefined
-  if (!tier && !pack) return <Navigate to="/membership" replace />
+  const topup = kind === 'topup' ? TOPUPS.find((t) => t.id === id) : undefined
+  if (!tier && !topup) return <Navigate to="/membership" replace />
 
-  const title = tier ? `${tier.name} plan` : `${pack!.name} — ${pack!.credits} credits`
-  const price = tier ? `${currency(tier.priceMo)} / month` : currency(pack!.price)
+  const title = tier ? `${tier.name} plan` : `${topup!.name} this month`
+  const price = tier ? `${currency(tier.priceMo)} / month` : currency(topup!.price)
   const detail = tier
     ? `${tier.projectsMo} project unlocks each month, roam anywhere.`
-    : `${pack!.credits} project unlocks added to your balance. Credits never expire.`
+    : `${topup!.credits} extra project unlocks added to this month’s balance. Top-up credits also expire on the 1st.`
 
   function complete() {
     if (tier) s.upgradeTier(tier.id)
-    if (pack) s.buyPack(pack.id)
+    if (topup) s.buyCredits(topup.id)
     setDone(true)
   }
 
@@ -54,7 +54,7 @@ export function PurchaseConfirm() {
               onClick={complete}
               className="flex-1 rounded-lg bg-teal px-4 py-2.5 text-sm font-semibold text-white hover:bg-teal-dark"
             >
-              {tier ? 'Complete purchase' : `Buy ${pack!.credits} credits`}
+              {tier ? 'Complete purchase' : `Buy ${topup!.credits} credits`}
             </button>
             <button
               onClick={() => nav('/membership')}
@@ -75,12 +75,12 @@ export function PurchaseConfirm() {
           <p className="mt-1 text-muted">
             {tier
               ? `${tier.projectsMo} project unlocks available this month.`
-              : `Your balance is now ${s.remaining} credits.`}
+              : `Your balance is now ${s.remaining} credits this month.`}
           </p>
 
           <div className="mt-5 inline-flex items-center gap-2 rounded-xl bg-canvas px-5 py-3">
             <span className="text-sm text-muted">
-              {tier ? 'Projects left this month' : 'Credit balance'}
+              {tier ? 'Projects left this month' : 'Credits left this month'}
             </span>
             <span className="text-lg font-bold text-ink">
               {tier ? `${s.remaining} of ${s.capacity}` : s.remaining}

@@ -11,7 +11,7 @@ export function PlanStatusCard() {
   return (
     <div className="rounded-xl border border-white/10 bg-white/[0.04] p-3">
       <div className="text-[11px] font-semibold tracking-wide text-white/50 uppercase">
-        {isSub ? 'Monthly subscription' : 'Prepaid balance'}
+        {isSub ? 'Monthly subscription' : 'Monthly credits'}
       </div>
 
       {isSub ? (
@@ -34,9 +34,11 @@ export function PlanStatusCard() {
           <div className="mt-1 flex items-baseline gap-1.5">
             <IconCoin className="translate-y-0.5 text-[16px] text-gold" />
             <span className="text-lg font-bold text-white">{s.remaining}</span>
-            <span className="text-xs text-white/60">credits</span>
+            <span className="text-xs text-white/60">credits · this month</span>
           </div>
-          <div className="mt-1 text-[11px] text-white/50">Credits never expire</div>
+          <div className="mt-1 text-[11px] text-white/50">
+            Up to {s.capacity}/mo · resets {formatDate(s.resetDate)} · unused expire
+          </div>
         </>
       )}
 

@@ -22,8 +22,8 @@ export function LowBalanceNudge() {
           </>
         ) : (
           <>
-            Only <b>{s.remaining} credit{s.remaining === 1 ? '' : 's'}</b> left. Top up so you
-            don&rsquo;t run out mid-search.
+            Only <b>{s.remaining} credit{s.remaining === 1 ? '' : 's'}</b> left this month. Top up to
+            keep unlocking.
           </>
         )}
       </span>

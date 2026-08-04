@@ -1,10 +1,22 @@
 import { useNavigate } from 'react-router-dom'
 import { useDemoState } from '../context/DemoStateContext'
-import { PACKS, TIERS } from '../config/pricing'
+import { PREPAID_PLAN, TIERS, TOPUPS } from '../config/pricing'
 import { currency, currency2 } from '../lib/format'
 import { daysUntil, formatDate } from '../lib/date'
 import { SegmentedMeter } from '../layout/BalanceWidget'
 import { IconArrowRight, IconCheck, IconCoin } from '../components/icons'
+
+function ContinueButton() {
+  const nav = useNavigate()
+  return (
+    <button
+      onClick={() => nav('/finder')}
+      className="inline-flex items-center gap-2 rounded-lg border border-line px-4 py-2 text-sm font-semibold hover:bg-canvas"
+    >
+      Continue to Project Finder <IconArrowRight className="text-[15px]" />
+    </button>
+  )
+}
 
 function TierLadder() {
   const s = useDemoState()
@@ -20,22 +32,16 @@ function TierLadder() {
           <div className="mt-1 flex items-center gap-3">
             <span className="text-lg font-bold text-ink">{s.activeTier?.name}</span>
             <span className="text-muted">${s.activeTier?.priceMo}/mo</span>
-            <SegmentedMeter remaining={s.remaining} total={s.capacity ?? 0} tone="light" />
+            <SegmentedMeter remaining={s.remaining} total={s.capacity} tone="light" />
             <span className="text-sm font-medium">
               {s.remaining} of {s.capacity} left
             </span>
           </div>
           <div className="mt-1 text-sm text-muted">
-            Renews {s.resetDate ? formatDate(s.resetDate) : '—'} · in{' '}
-            {s.resetDate ? daysUntil(s.resetDate) : 0} days
+            Renews {formatDate(s.resetDate)} · in {daysUntil(s.resetDate)} days
           </div>
         </div>
-        <button
-          onClick={() => nav('/finder')}
-          className="inline-flex items-center gap-2 rounded-lg border border-line px-4 py-2 text-sm font-semibold hover:bg-canvas"
-        >
-          Continue to Project Finder <IconArrowRight className="text-[15px]" />
-        </button>
+        <ContinueButton />
       </div>
 
       <div className="mt-6 grid gap-5 md:grid-cols-3">
@@ -95,7 +101,14 @@ function TierLadder() {
   )
 }
 
-function PackGrid() {
+const PLAN_FEATURES = [
+  'Roam anywhere — no radius or region',
+  `Up to ${PREPAID_PLAN.monthlyCredits} project unlocks each month`,
+  'Unused credits expire on the 1st',
+  'Buy more credits anytime',
+]
+
+function CreditPlan() {
   const s = useDemoState()
   const nav = useNavigate()
 
@@ -104,59 +117,76 @@ function PackGrid() {
       <div className="flex flex-wrap items-center justify-between gap-4 rounded-xl border border-line bg-white p-5">
         <div>
           <div className="text-xs font-semibold tracking-wide text-muted uppercase">
-            Your balance
+            Up to {PREPAID_PLAN.monthlyCredits} projects a month
           </div>
           <div className="mt-1 flex items-center gap-2">
             <IconCoin className="text-[22px] text-gold" />
             <span className="text-2xl font-bold text-ink">{s.remaining}</span>
-            <span className="text-muted">credits · never expire</span>
+            <span className="text-muted">credits left this month</span>
           </div>
           <div className="mt-1 text-sm text-muted">
-            Spent {s.state.prepaid.lifetimeSpent} all-time
+            Resets {formatDate(s.resetDate)} · in {daysUntil(s.resetDate)} days · unused expire
           </div>
         </div>
-        <button
-          onClick={() => nav('/finder')}
-          className="inline-flex items-center gap-2 rounded-lg border border-line px-4 py-2 text-sm font-semibold hover:bg-canvas"
-        >
-          Continue to Project Finder <IconArrowRight className="text-[15px]" />
-        </button>
+        <ContinueButton />
       </div>
 
-      <div className="mt-6 grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
-        {PACKS.map((p) => (
-          <div
-            key={p.id}
-            className={`relative flex flex-col rounded-2xl border bg-white p-6 ${
-              p.badge === 'Best value' ? 'border-teal shadow-sm' : 'border-line'
-            }`}
-          >
-            {p.badge && (
-              <span className="absolute -top-3 left-6 rounded-full bg-gold px-3 py-1 text-[11px] font-bold tracking-wide text-white uppercase">
-                {p.badge}
-              </span>
-            )}
-            <div className="text-sm font-semibold text-muted">{p.name}</div>
-            <div className="mt-2 flex items-baseline gap-1.5">
-              <span className="text-3xl font-bold text-ink">{p.credits}</span>
-              <span className="text-muted">credits</span>
+      {/* the plan */}
+      <div className="mt-6 rounded-2xl border border-teal bg-white p-6 shadow-sm">
+        <div className="flex flex-wrap items-start justify-between gap-4">
+          <div>
+            <div className="text-lg font-bold text-ink">Up to {PREPAID_PLAN.monthlyCredits} projects a month</div>
+            <div className="mt-1 flex items-baseline gap-1">
+              <span className="text-3xl font-bold text-ink">{currency(PREPAID_PLAN.priceMo)}</span>
+              <span className="text-muted">/mo</span>
             </div>
-            <div className="mt-3 text-2xl font-bold text-ink">{currency(p.price)}</div>
-            <div className="text-sm text-muted">{currency2(p.perUnit)} / unlock</div>
-            <button
-              onClick={() => nav(`/purchase?kind=pack&id=${p.id}`)}
-              className="mt-5 rounded-lg bg-teal py-2.5 text-center text-sm font-semibold text-white hover:bg-teal-dark"
-            >
-              Buy pack
-            </button>
+            <ul className="mt-4 space-y-2">
+              {PLAN_FEATURES.map((f) => (
+                <li key={f} className="flex items-start gap-2 text-sm text-ink/80">
+                  <IconCheck className="mt-0.5 text-[15px] text-teal" />
+                  {f}
+                </li>
+              ))}
+            </ul>
           </div>
-        ))}
+          <div className="rounded-lg border border-teal/40 bg-teal-50 px-4 py-2.5 text-center text-sm font-semibold text-teal-dark">
+            Current plan
+          </div>
+        </div>
       </div>
 
-      <p className="mt-4 text-sm text-muted">
-        Credits never expire and roll over month to month. Bigger packs cost less per unlock — top up
-        anytime.
-      </p>
+      {/* mid-month top-ups */}
+      <div className="mt-8">
+        <h2 className="text-lg font-bold text-ink">Need more this month?</h2>
+        <p className="mt-1 text-sm text-muted">
+          Buy extra credits to keep unlocking. Top-up credits also expire on the 1st.
+        </p>
+        <div className="mt-4 grid gap-5 sm:grid-cols-3">
+          {TOPUPS.map((t) => (
+            <div
+              key={t.id}
+              className={`relative flex flex-col rounded-2xl border bg-white p-6 ${
+                t.badge === 'Best value' ? 'border-teal shadow-sm' : 'border-line'
+              }`}
+            >
+              {t.badge && (
+                <span className="absolute -top-3 left-6 rounded-full bg-gold px-3 py-1 text-[11px] font-bold tracking-wide text-white uppercase">
+                  {t.badge}
+                </span>
+              )}
+              <div className="text-2xl font-bold text-ink">{t.name}</div>
+              <div className="mt-3 text-2xl font-bold text-ink">{currency(t.price)}</div>
+              <div className="text-sm text-muted">{currency2(t.perUnit)} / unlock</div>
+              <button
+                onClick={() => nav(`/purchase?kind=topup&id=${t.id}`)}
+                className="mt-5 rounded-lg bg-teal py-2.5 text-center text-sm font-semibold text-white hover:bg-teal-dark"
+              >
+                Buy credits
+              </button>
+            </div>
+          ))}
+        </div>
+      </div>
     </>
   )
 }
@@ -166,14 +196,14 @@ export function MembershipPage() {
   return (
     <div className="p-6">
       <h1 className="text-2xl font-bold">
-        {concept === 'subscription' ? 'Choose your plan' : 'Buy project credits'}
+        {concept === 'subscription' ? 'Choose your plan' : 'Your monthly credits'}
       </h1>
       <p className="mt-1 text-muted">
         {concept === 'subscription'
           ? 'A set number of project unlocks each month — roam anywhere.'
-          : 'A prepaid balance of project unlocks you spend as you go — roam anywhere.'}
+          : `Up to ${PREPAID_PLAN.monthlyCredits} project unlocks a month — roam anywhere, unused expire on the 1st.`}
       </p>
-      <div className="mt-5">{concept === 'subscription' ? <TierLadder /> : <PackGrid />}</div>
+      <div className="mt-5">{concept === 'subscription' ? <TierLadder /> : <CreditPlan />}</div>
     </div>
   )
 }

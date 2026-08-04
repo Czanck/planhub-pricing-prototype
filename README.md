@@ -6,8 +6,8 @@ roam-anywhere access**, switchable by a feature flag.
 
 - **Concept A — Monthly Subscription:** a set number of project unlocks each month ($99 / 10
   projects). Resets on the 1st; unused unlocks lapse; no top-ups.
-- **Concept B — Prepaid Balance:** buy a balance of credits (from $99 / 10). Credits roll over,
-  never expire, and you top up when you run low.
+- **Concept B — Monthly Credits:** up to 25 project unlocks a month ($149/mo). Unused credits
+  expire on the 1st; if you run out mid-month you can buy more credits (top-ups also expire).
 
 Both share the same finder, the same free "evaluation layer" on each project, and the same
 one-unlock-reveals-everything paywall — so the only variable under test is the pricing model.

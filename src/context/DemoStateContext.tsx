@@ -13,13 +13,14 @@ import type {
   Tier,
   TierId,
 } from '../types'
-import { LOW_THRESHOLD, PACKS, START, TIERS } from '../config/pricing'
+import { LOW_THRESHOLD, START, TIERS, TOPUPS } from '../config/pricing'
 import { firstOfNextMonth } from '../lib/date'
 
 const LS_KEY = 'planhub-proto-state'
-const STATE_VERSION = 1
+const STATE_VERSION = 2
 
 function initialState(): DemoState {
+  const resetDate = firstOfNextMonth()
   return {
     version: STATE_VERSION,
     concept: 'subscription',
@@ -27,11 +28,14 @@ function initialState(): DemoState {
       tier: START.subscriptionTier,
       allotment: START.subscriptionAllotment,
       used: START.subscriptionUsed,
-      resetDate: firstOfNextMonth(),
+      resetDate,
       unlockedProjectIds: [],
     },
     prepaid: {
-      balance: START.prepaidBalance,
+      allowance: START.prepaidAllowance,
+      used: START.prepaidUsed,
+      boughtThisCycle: 0,
+      resetDate,
       lifetimeSpent: 0,
       unlockedProjectIds: [],
     },
@@ -39,16 +43,26 @@ function initialState(): DemoState {
   }
 }
 
-/** If the stored reset date has passed in real time, roll the monthly allotment. */
+function pastReset(iso: string): boolean {
+  return Date.now() > new Date(`${iso}T12:00:00`).getTime()
+}
+
+/** Both concepts are monthly now — roll either cycle whose reset date has passed. */
 function applyMonthlyReset(state: DemoState): DemoState {
-  const resetMs = new Date(`${state.subscription.resetDate}T12:00:00`).getTime()
-  if (Date.now() > resetMs) {
-    return {
-      ...state,
-      subscription: { ...state.subscription, used: 0, resetDate: firstOfNextMonth() },
+  let next = state
+  if (pastReset(state.subscription.resetDate)) {
+    next = {
+      ...next,
+      subscription: { ...next.subscription, used: 0, resetDate: firstOfNextMonth() },
     }
   }
-  return state
+  if (pastReset(state.prepaid.resetDate)) {
+    next = {
+      ...next,
+      prepaid: { ...next.prepaid, used: 0, boughtThisCycle: 0, resetDate: firstOfNextMonth() },
+    }
+  }
+  return next
 }
 
 function load(): DemoState {
@@ -76,13 +90,17 @@ function save(state: DemoState) {
 type Action =
   | { type: 'SET_CONCEPT'; concept: Concept }
   | { type: 'UNLOCK'; id: string }
-  | { type: 'BUY_PACK'; credits: number }
+  | { type: 'BUY_CREDITS'; credits: number }
   | { type: 'UPGRADE_TIER'; tier: TierId; allotment: number }
   | { type: 'SIMULATE_RESET' }
   | { type: 'SET_PRESET'; preset: BalancePreset }
   | { type: 'RESET_DEMO' }
   | { type: 'RESET_ALL' }
   | { type: 'MARK_MIGRATION' }
+
+function prepaidRemaining(p: DemoState['prepaid']): number {
+  return p.allowance + p.boughtThisCycle - p.used
+}
 
 function reducer(state: DemoState, action: Action): DemoState {
   switch (action.type) {
@@ -105,22 +123,23 @@ function reducer(state: DemoState, action: Action): DemoState {
       }
       const p = state.prepaid
       if (p.unlockedProjectIds.includes(action.id)) return state
-      if (p.balance <= 0) return state
+      if (prepaidRemaining(p) <= 0) return state
       return {
         ...state,
         prepaid: {
           ...p,
-          balance: p.balance - 1,
+          used: p.used + 1,
           lifetimeSpent: p.lifetimeSpent + 1,
           unlockedProjectIds: [...p.unlockedProjectIds, action.id],
         },
       }
     }
 
-    case 'BUY_PACK':
+    case 'BUY_CREDITS':
+      // Mid-month top-up; these credits also expire on the next reset.
       return {
         ...state,
-        prepaid: { ...state.prepaid, balance: state.prepaid.balance + action.credits },
+        prepaid: { ...state.prepaid, boughtThisCycle: state.prepaid.boughtThisCycle + action.credits },
       }
 
     case 'UPGRADE_TIER':
@@ -131,9 +150,21 @@ function reducer(state: DemoState, action: Action): DemoState {
       }
 
     case 'SIMULATE_RESET':
+      // Roll the active concept's monthly cycle.
+      if (state.concept === 'subscription') {
+        return {
+          ...state,
+          subscription: { ...state.subscription, used: 0, resetDate: firstOfNextMonth() },
+        }
+      }
       return {
         ...state,
-        subscription: { ...state.subscription, used: 0, resetDate: firstOfNextMonth() },
+        prepaid: {
+          ...state.prepaid,
+          used: 0,
+          boughtThisCycle: 0,
+          resetDate: firstOfNextMonth(),
+        },
       }
 
     case 'SET_PRESET': {
@@ -148,13 +179,14 @@ function reducer(state: DemoState, action: Action): DemoState {
               : s.allotment // zero remaining
         return { ...state, subscription: { ...s, used } }
       }
-      const balance =
+      const p = state.prepaid
+      const used =
         action.preset === 'normal'
-          ? START.prepaidBalance
+          ? START.prepaidUsed
           : action.preset === 'low'
-            ? START.scriptedRemaining
-            : 0
-      return { ...state, prepaid: { ...state.prepaid, balance } }
+            ? Math.max(0, p.allowance - START.scriptedRemaining)
+            : p.allowance // zero remaining
+      return { ...state, prepaid: { ...p, used, boughtThisCycle: 0 } }
     }
 
     case 'RESET_DEMO':
@@ -179,12 +211,14 @@ export interface DemoContextValue {
   concept: Concept
   /** Active-concept remaining unlocks. */
   remaining: number
-  /** Subscription allotment, or null in prepaid. */
-  capacity: number | null
-  used: number | null
-  resetDate: string | null
+  /** Monthly ceiling: subscription allotment, or the prepaid base allowance ("up to N"). */
+  capacity: number
+  used: number
+  resetDate: string
   /** Prepaid credit balance, or null in subscription. */
   balance: number | null
+  /** Extra credits bought this month (prepaid only). */
+  boughtThisCycle: number
   activeTier: Tier | null
   isUnlocked: (id: string) => boolean
   canUnlock: boolean
@@ -192,7 +226,7 @@ export interface DemoContextValue {
   isZero: boolean
   setConcept: (c: Concept) => void
   unlockProject: (id: string) => 'ok' | 'already' | 'blocked'
-  buyPack: (packId: string) => void
+  buyCredits: (topupId: string) => void
   upgradeTier: (tier: TierId) => void
   simulateReset: () => void
   setBalancePreset: (p: BalancePreset) => void
@@ -215,7 +249,7 @@ export function DemoStateProvider({ children }: { children: ReactNode }) {
     const active = isSub ? state.subscription : state.prepaid
     const remaining = isSub
       ? state.subscription.allotment - state.subscription.used
-      : state.prepaid.balance
+      : prepaidRemaining(state.prepaid)
     const activeTier = isSub
       ? TIERS.find((t) => t.id === state.subscription.tier) ?? null
       : null
@@ -224,10 +258,11 @@ export function DemoStateProvider({ children }: { children: ReactNode }) {
       state,
       concept: state.concept,
       remaining,
-      capacity: isSub ? state.subscription.allotment : null,
-      used: isSub ? state.subscription.used : null,
-      resetDate: isSub ? state.subscription.resetDate : null,
-      balance: isSub ? null : state.prepaid.balance,
+      capacity: isSub ? state.subscription.allotment : state.prepaid.allowance,
+      used: active.used,
+      resetDate: active.resetDate,
+      balance: isSub ? null : remaining,
+      boughtThisCycle: state.prepaid.boughtThisCycle,
       activeTier,
       isUnlocked: (id) => active.unlockedProjectIds.includes(id),
       canUnlock: remaining > 0,
@@ -240,9 +275,9 @@ export function DemoStateProvider({ children }: { children: ReactNode }) {
         dispatch({ type: 'UNLOCK', id })
         return 'ok'
       },
-      buyPack: (packId) => {
-        const pack = PACKS.find((x) => x.id === packId)
-        if (pack) dispatch({ type: 'BUY_PACK', credits: pack.credits })
+      buyCredits: (topupId) => {
+        const t = TOPUPS.find((x) => x.id === topupId)
+        if (t) dispatch({ type: 'BUY_CREDITS', credits: t.credits })
       },
       upgradeTier: (tier) => {
         const t = TIERS.find((x) => x.id === tier)

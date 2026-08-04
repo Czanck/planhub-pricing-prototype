@@ -21,7 +21,10 @@ export interface SubscriptionState {
 }
 
 export interface PrepaidState {
-  balance: number // credits remaining
+  allowance: number // base monthly credit allowance ("up to N projects a month")
+  used: number // credits spent this cycle
+  boughtThisCycle: number // extra credits bought this month (also expire on reset)
+  resetDate: string // ISO — first of next month
   lifetimeSpent: number
   unlockedProjectIds: string[]
 }

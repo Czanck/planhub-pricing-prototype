@@ -20,7 +20,7 @@ export function UnlockedProjects() {
       <p className="mt-1 text-muted">
         {isSub
           ? `${s.used} of ${s.capacity} projects used this cycle · resets refill your allowance.`
-          : `${s.state.prepaid.lifetimeSpent} credits spent all-time · ${s.remaining} remaining.`}{' '}
+          : `${s.used} of up to ${s.capacity} credits used this month · ${s.remaining} left · unused expire on the 1st.`}{' '}
         Revisiting an unlocked project never charges you again.
       </p>
 
