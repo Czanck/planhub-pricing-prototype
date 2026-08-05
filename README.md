@@ -34,18 +34,20 @@ npm run preview   # preview the production build
 
 ## Using it in a session (for the moderator)
 
-1. The **Start screen** (`/`) lets you pick Concept A or B before handing off.
-2. A discreet **A · Subscription / B · Prepaid** toggle sits in the top bar — flip concepts
-   anytime. Each concept keeps its **own** balance and unlocked-project set, so a participant can
-   evaluate the same project fresh under each one (counterbalanced order).
-3. The **Prototype settings** menu (top bar, "Research only") lets you:
+Participants see a clean, product-like UI — the research controls are hidden.
+
+1. On the **Start screen** (`/`), pick **Concept A** or **B** — it drops straight into the Project
+   Finder in that concept.
+2. Press **Shift + P** anywhere to open the **moderator panel** (hidden from participants; press
+   again or Esc to close). From it you can:
+   - switch **Concept A ⟷ B** — each keeps its own balance and unlocked projects, so the same
+     project can be evaluated fresh under each (counterbalanced order),
    - jump the balance to **Normal / Low · 2 / Zero** (the "2 remaining" state matches the script),
-   - **Simulate month reset** (Concept A),
+   - **Simulate month reset**,
    - **Reset session data** between participants, or go **Back to start**.
 
-The scripted flow for each concept: view the offer (Membership) → purchase → see status → open a
-project → read the free evaluation layer → **unlock** (spend) → see the full project → hit the
-low / zero-balance state.
+The scripted flow for each concept: view the offer (Pricing) → open a project → read the free
+evaluation layer → **unlock** (spend) → see the full project → hit the low / zero-balance state.
 
 ## Editing the numbers
 

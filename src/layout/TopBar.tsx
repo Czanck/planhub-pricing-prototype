@@ -29,9 +29,8 @@ export function TopBar() {
 
         <span className="mx-0.5 hidden h-6 w-px bg-white/10 sm:block" />
 
-        <div className="hidden md:flex">
-          <ResearcherPanel />
-        </div>
+        {/* moderator controls — no visible button; opens with Shift+P */}
+        <ResearcherPanel />
 
         <button className="hidden rounded-full p-2 text-white/70 hover:bg-white/5 hover:text-white lg:inline-flex">
           <IconBell className="text-[16px]" />
