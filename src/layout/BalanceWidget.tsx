@@ -118,19 +118,17 @@ export function BalanceWidget() {
             ) : (
               <div>
                 <div className="flex items-center justify-between">
-                  <span className="text-sm font-semibold">Monthly credits</span>
-                  <span className="text-xs text-muted">up to {s.capacity}/mo</span>
+                  <span className="text-sm font-semibold">Prepaid credits</span>
+                  <span className="inline-flex items-center gap-1 text-xs text-muted">
+                    <IconCoin className="text-[13px] text-gold" /> credits
+                  </span>
                 </div>
                 <div className="mt-2 text-3xl font-bold text-ink">{s.remaining}</div>
-                <p className="text-sm text-muted">credits left this month</p>
+                <p className="text-sm text-muted">≈ {s.remaining} project unlocks · never expire</p>
                 <dl className="mt-3 space-y-1 text-sm text-muted">
                   <div className="flex justify-between">
-                    <dt>Resets</dt>
-                    <dd className="font-medium text-ink">{formatDateLong(s.resetDate)}</dd>
-                  </div>
-                  <div className="flex justify-between">
-                    <dt>&nbsp;</dt>
-                    <dd className="text-xs">in {daysUntil(s.resetDate)} days · unused expire</dd>
+                    <dt>Spent all-time</dt>
+                    <dd className="font-medium text-ink">{s.state.prepaid.lifetimeSpent}</dd>
                   </div>
                 </dl>
                 <div className="mt-3 flex gap-2">

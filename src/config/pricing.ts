@@ -54,31 +54,25 @@ export const TIERS: Tier[] = [
   },
 ]
 
-// ---- Concept B · Monthly credit plan + mid-month top-ups --------------------
-// B grants "up to N projects a month" as credits that reset on the 1st and
-// EXPIRE if unused. Run low → buy more credits (top-ups also expire on the 1st).
-export const PREPAID_PLAN = {
-  monthlyCredits: 25, // "up to 25 projects a month"
-  priceMo: 149,
-}
-
-/** Top-up credits bought mid-month (bigger = cheaper per unlock; expire on the 1st). */
-export const TOPUPS: Pack[] = [
-  { id: 't10', name: '+10 credits', credits: 10, price: 79, perUnit: 7.9 },
-  { id: 't25', name: '+25 credits', credits: 25, price: 179, perUnit: 7.16, badge: 'Popular' },
-  { id: 't50', name: '+50 credits', credits: 50, price: 319, perUnit: 6.38, badge: 'Best value' },
+// ---- Concept B · Prepaid credit packs ---------------------------------------
+// No subscription. You buy credits, they NEVER expire, and each project unlock
+// spends one. Bigger packs cost less per unlock.
+export const PACKS: Pack[] = [
+  { id: 'p10', name: 'Starter', credits: 10, price: 99, perUnit: 9.9 },
+  { id: 'p25', name: 'Pro', credits: 25, price: 229, perUnit: 9.16, badge: 'Popular' },
+  { id: 'p50', name: 'Business', credits: 50, price: 399, perUnit: 7.98, badge: 'Best value' },
+  { id: 'p100', name: 'Enterprise', credits: 100, price: 699, perUnit: 6.99 },
 ]
 
-/** The top-up offered as a quick-buy on the zero-balance wall. */
-export const FEATURED_TOPUP_ID = 't10'
+/** The pack offered as a quick-buy on the zero-balance wall. */
+export const FEATURED_PACK_ID = 'p10'
 
 // ---- Starting balances (what loads on a fresh demo) -------------------------
 export const START = {
   subscriptionTier: 'good' as const,
   subscriptionAllotment: 10,
   subscriptionUsed: 0, // fresh = full 10 of 10
-  prepaidAllowance: 25, // "up to 25 projects a month"
-  prepaidUsed: 0, // fresh = full 25 available this month
+  prepaidBalance: 25, // fresh = a Pro pack of credits already bought
   // The interview script's "2 of your 10 / 2 credits remaining" moment:
   scriptedRemaining: 2,
 }

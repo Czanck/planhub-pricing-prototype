@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom'
 import { useDemoState } from '../context/DemoStateContext'
 import { FeatureFlagToggle } from '../components/FeatureFlagToggle'
-import { PREPAID_PLAN, START } from '../config/pricing'
+import { START } from '../config/pricing'
 import { currency } from '../lib/format'
 import { IconArrowRight, IconBan, IconCheck, IconGlobe } from '../components/icons'
 
@@ -88,7 +88,7 @@ export function WelcomeMigration() {
               <p className="mt-2 text-sm font-medium text-ink">
                 {isSub
                   ? `In this concept you get ${START.subscriptionAllotment} project unlocks each month.`
-                  : `In this concept you get up to ${PREPAID_PLAN.monthlyCredits} project unlocks a month — unused ones expire, and you can buy more anytime.`}
+                  : `In this concept you buy credits and spend one to unlock any project — they never expire, and you buy more whenever you like.`}
               </p>
             </div>
           </div>
