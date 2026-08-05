@@ -1,6 +1,5 @@
 import { Link } from 'react-router-dom'
 import { BalanceWidget } from './BalanceWidget'
-import { FeatureFlagToggle } from '../components/FeatureFlagToggle'
 import { ResearcherPanel } from '../components/ResearcherPanel'
 import { COMPANY } from '../data/company'
 import { IconBell, IconChevronDown } from '../components/icons'
@@ -30,8 +29,7 @@ export function TopBar() {
 
         <span className="mx-0.5 hidden h-6 w-px bg-white/10 sm:block" />
 
-        <div className="hidden items-center gap-2 md:flex">
-          <FeatureFlagToggle />
+        <div className="hidden md:flex">
           <ResearcherPanel />
         </div>
 

@@ -5,13 +5,10 @@ import { COMPANY } from '../data/company'
 import {
   IconBriefcase,
   IconBuilding,
-  IconChevronDown,
   IconClipboard,
   IconGlobe,
   IconGrid,
-  IconMail,
   IconPaperPlane,
-  IconPlus,
   IconRuler,
   IconSearch,
 } from '../components/icons'
@@ -66,18 +63,8 @@ export function Sidebar() {
         <Logo />
       </div>
 
-      <div className="px-3">
-        <button className="flex w-full items-center justify-between rounded-full bg-white px-4 py-2 text-sm font-semibold text-navy hover:bg-white/90">
-          <span className="flex items-center gap-2">
-            <IconPlus className="text-[16px]" /> Add New
-          </span>
-          <IconChevronDown className="text-[14px] text-navy/50" />
-        </button>
-      </div>
-
-      <nav className="mt-4 space-y-0.5 px-3">
+      <nav className="mt-5 space-y-0.5 px-3">
         <NavRow icon={IconGrid} label="Dashboard" to="/dashboard" />
-        <NavRow icon={IconMail} label="Mail" to={null} />
       </nav>
 
       <div className="mt-5 px-5 text-[11px] font-semibold tracking-widest text-white/40 uppercase">
