@@ -34,7 +34,7 @@ export function StartScreen() {
 
   function choose(c: Concept) {
     setConcept(c)
-    nav('/welcome')
+    nav('/finder')
   }
 
   return (
