@@ -34,7 +34,7 @@ export const TIERS: Tier[] = [
     blurb: 'For active bidders',
     features: [
       'Everything in Good',
-      'Projects under $25M',
+      'Projects under $10M',
       '25 project unlocks / month',
       'Ask AI · Go / No-Go',
       'Priority support',
