@@ -21,7 +21,6 @@ export const TIERS: Tier[] = [
     features: [
       'Roam anywhere — no radius or region',
       'Projects under $5M',
-      '10 project unlocks / month',
       'Market Intelligence',
       'Project Fit preview',
     ],
@@ -35,7 +34,6 @@ export const TIERS: Tier[] = [
     features: [
       'Everything in Good',
       'Projects under $10M',
-      '25 project unlocks / month',
       'Ask AI · Go / No-Go',
       'Priority support',
     ],
@@ -50,7 +48,6 @@ export const TIERS: Tier[] = [
     features: [
       'Everything in Better',
       'Projects of any size',
-      '60 project unlocks / month',
       '3 team seats',
       'Exports & API',
     ],
