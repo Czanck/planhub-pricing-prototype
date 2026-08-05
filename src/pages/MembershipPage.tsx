@@ -66,7 +66,7 @@ function TierLadder() {
                 <span className="text-muted">/mo</span>
               </div>
               <div className="mt-1 text-sm font-semibold text-teal-dark">
-                {t.projectsMo} projects / month
+                Up to {t.projectsMo} projects / month
               </div>
               <ul className="mt-4 flex-1 space-y-2">
                 {t.features.map((f) => (
