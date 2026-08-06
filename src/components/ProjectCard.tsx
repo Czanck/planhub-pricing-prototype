@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import type { Project } from '../types'
 import { useDemoState } from '../context/DemoStateContext'
 import { IconBan, IconBookmark, IconCheck } from './icons'
@@ -17,16 +18,30 @@ export function ProjectCard({
   const far = project.distanceMi > 60
 
   return (
-    <button
+    <div
+      role="button"
+      tabIndex={0}
       onClick={onSelect}
-      className={`flex w-full items-center gap-3 border-l-2 px-4 py-3 text-left transition ${
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault()
+          onSelect()
+        }
+      }}
+      className={`flex w-full cursor-pointer items-center gap-3 border-l-2 px-4 py-3 text-left transition ${
         selected ? 'border-teal bg-teal-50/60' : 'border-transparent hover:bg-canvas'
       }`}
     >
       <div className="min-w-0 flex-1">
         <div className="flex items-center gap-2">
           <span className="h-2 w-2 shrink-0 rounded-full bg-teal" />
-          <span className="truncate font-semibold text-ink">{project.name}</span>
+          <Link
+            to={`/project/${project.id}`}
+            onClick={(e) => e.stopPropagation()}
+            className="truncate font-semibold text-ink hover:text-teal-dark hover:underline"
+          >
+            {project.name}
+          </Link>
           {unlocked && (
             <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-teal-50 px-2 py-0.5 text-[10px] font-bold tracking-wide text-teal-dark uppercase">
               <IconCheck className="text-[11px]" /> Unlocked
@@ -55,6 +70,6 @@ export function ProjectCard({
         <IconBookmark className="text-[15px]" />
         <IconBan className="text-[15px]" />
       </span>
-    </button>
+    </div>
   )
 }
