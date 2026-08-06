@@ -82,58 +82,70 @@ function GcAndUnlock({
       </div>
 
       <div className="p-4">
-        <div className="flex items-center gap-3">
-          <span className="grid h-9 w-9 place-items-center rounded-md bg-canvas text-[11px] font-bold text-muted">
-            {gc.name
-              .split(' ')
-              .slice(0, 2)
-              .map((w) => w[0])
-              .join('')}
-          </span>
-          <div className="min-w-0">
-            <div className="truncate font-semibold text-ink">{gc.name}</div>
-            <div className="flex items-center gap-2 text-xs text-muted">
-              <Badge tone="gray">{gc.biddingStatus}</Badge>
-              Due {formatDate(gc.bidDue)}
-            </div>
-          </div>
-        </div>
-
         {unlocked ? (
-          <div className="mt-3 space-y-1.5 rounded-lg bg-teal-50 p-3 text-sm">
-            <div className="flex justify-between">
-              <span className="text-muted">Contact</span>
-              <span className="font-semibold text-ink">{gc.contactName}</span>
+          <>
+            <div className="flex items-center gap-3">
+              <span className="grid h-9 w-9 place-items-center rounded-md bg-canvas text-[11px] font-bold text-muted">
+                {gc.name
+                  .split(' ')
+                  .slice(0, 2)
+                  .map((w) => w[0])
+                  .join('')}
+              </span>
+              <div className="min-w-0">
+                <div className="truncate font-semibold text-ink">{gc.name}</div>
+                <div className="flex items-center gap-2 text-xs text-muted">
+                  <Badge tone="gray">{gc.biddingStatus}</Badge>
+                  Due {formatDate(gc.bidDue)}
+                </div>
+              </div>
             </div>
-            <div className="flex justify-between">
-              <span className="text-muted">Phone</span>
-              <span className="font-semibold text-ink">{gc.phone}</span>
+            <div className="mt-3 space-y-1.5 rounded-lg bg-teal-50 p-3 text-sm">
+              <div className="flex justify-between">
+                <span className="text-muted">Contact</span>
+                <span className="font-semibold text-ink">{gc.contactName}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-muted">Phone</span>
+                <span className="font-semibold text-ink">{gc.phone}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-muted">Email</span>
+                <span className="font-semibold text-ink">{gc.email}</span>
+              </div>
+              <div className="flex gap-2 pt-1">
+                <button className="flex-1 rounded-lg bg-teal px-3 py-1.5 text-xs font-semibold text-white">
+                  Message GC
+                </button>
+                <button className="flex-1 rounded-lg border border-line bg-white px-3 py-1.5 text-xs font-semibold">
+                  Call
+                </button>
+              </div>
             </div>
-            <div className="flex justify-between">
-              <span className="text-muted">Email</span>
-              <span className="font-semibold text-ink">{gc.email}</span>
-            </div>
-            <div className="flex gap-2 pt-1">
-              <button className="flex-1 rounded-lg bg-teal px-3 py-1.5 text-xs font-semibold text-white">
-                Message GC
-              </button>
-              <button className="flex-1 rounded-lg border border-line bg-white px-3 py-1.5 text-xs font-semibold">
-                Call
-              </button>
-            </div>
-          </div>
+          </>
         ) : (
-          <div className="mt-3 flex items-center justify-between rounded-lg bg-canvas p-3 text-sm">
-            <span className="text-muted">Contact details</span>
-            <BlurLock width="w-28" />
-          </div>
+          <>
+            <div className="text-sm text-muted">
+              {project.gcs.length} general contractor{project.gcs.length === 1 ? '' : 's'} requesting
+              bids
+            </div>
+            <div className="mt-3 flex items-center gap-3 rounded-lg bg-canvas p-3">
+              <span className="grid h-9 w-9 shrink-0 place-items-center rounded-md bg-white text-muted">
+                <IconLock className="text-[15px]" />
+              </span>
+              <div className="min-w-0 flex-1 space-y-2">
+                <BlurLock width="w-40" />
+                <BlurLock width="w-28" />
+              </div>
+            </div>
+          </>
         )}
       </div>
 
       {!unlocked && (
         <div className="border-t border-line bg-white p-4">
           <p className="text-center text-sm text-muted">
-            GC contacts, project files &amp; Ask-AI unlock together
+            One unlock reveals GC contacts, files, location &amp; suppliers
           </p>
           <button
             onClick={onUnlock}
@@ -279,7 +291,7 @@ export function ProjectPage() {
   const tabs: { id: Tab; label: string; locked?: boolean }[] = [
     { id: 'overview', label: 'Overview' },
     { id: 'files', label: 'Files', locked: !unlocked },
-    { id: 'suppliers', label: 'Suppliers' },
+    { id: 'suppliers', label: 'Suppliers', locked: !unlocked },
   ]
 
   return (
@@ -392,14 +404,33 @@ export function ProjectPage() {
               <Card className="p-5">
                 <div className="flex items-center justify-between">
                   <h3 className="font-semibold text-ink">Project Location</h3>
-                  <span className="text-xs font-medium text-muted">{project.distanceMi} mi away</span>
+                  {unlocked ? (
+                    <span className="text-xs font-medium text-muted">
+                      {project.distanceMi} mi away
+                    </span>
+                  ) : (
+                    <IconLock className="text-[14px] text-gold" />
+                  )}
                 </div>
-                <div className="mt-3">
-                  <FauxMap unlocked={unlocked} />
-                </div>
-                <p className="mt-2 text-sm text-ink/80">
-                  {unlocked ? project.exactAddress : project.approxLocation}
-                </p>
+                {unlocked ? (
+                  <>
+                    <div className="mt-3">
+                      <FauxMap unlocked />
+                    </div>
+                    <p className="mt-2 text-sm text-ink/80">{project.exactAddress}</p>
+                  </>
+                ) : (
+                  <button
+                    onClick={requestUnlock}
+                    className="mt-3 flex w-full flex-col items-center justify-center gap-2 rounded-lg border border-dashed border-line bg-canvas py-8 text-center transition hover:border-teal hover:bg-teal-50"
+                  >
+                    <IconLock className="text-[22px] text-muted" />
+                    <span className="text-sm font-medium text-ink">
+                      Unlock to view the project location
+                    </span>
+                    <span className="text-xs text-muted">Map &amp; exact address</span>
+                  </button>
+                )}
               </Card>
               <GcAndUnlock project={project} unlocked={unlocked} onUnlock={requestUnlock} />
               <AskAiCard unlocked={unlocked} onUnlock={requestUnlock} />
@@ -414,22 +445,44 @@ export function ProjectPage() {
         )}
 
         {tab === 'suppliers' && (
-          <Card className="p-5">
-            <h3 className="font-semibold text-ink">Suppliers</h3>
-            <p className="mt-1 text-sm text-muted">
-              Distributors and reps serving this project&rsquo;s area.
-            </p>
-            <div className="mt-3 divide-y divide-line">
-              {['Ferguson — Las Vegas', 'Western Nevada Supply', 'Border States Electric'].map((n) => (
-                <div key={n} className="flex items-center justify-between py-2.5">
-                  <span className="text-sm font-medium text-ink">{n}</span>
-                  <button className="rounded-lg border border-line px-3 py-1.5 text-xs font-semibold hover:bg-canvas">
-                    Request quote
-                  </button>
+          <div className="max-w-3xl">
+            {unlocked ? (
+              <Card className="p-5">
+                <h3 className="font-semibold text-ink">Suppliers</h3>
+                <p className="mt-1 text-sm text-muted">
+                  Distributors and reps serving this project&rsquo;s area.
+                </p>
+                <div className="mt-3 divide-y divide-line">
+                  {['Ferguson — Las Vegas', 'Western Nevada Supply', 'Border States Electric'].map(
+                    (n) => (
+                      <div key={n} className="flex items-center justify-between py-2.5">
+                        <span className="text-sm font-medium text-ink">{n}</span>
+                        <button className="rounded-lg border border-line px-3 py-1.5 text-xs font-semibold hover:bg-canvas">
+                          Request quote
+                        </button>
+                      </div>
+                    ),
+                  )}
                 </div>
-              ))}
-            </div>
-          </Card>
+              </Card>
+            ) : (
+              <Card className="p-8 text-center">
+                <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-canvas text-muted">
+                  <IconLock className="text-[22px]" />
+                </div>
+                <h3 className="mt-3 font-semibold text-ink">Unlock this project to see suppliers</h3>
+                <p className="mt-1 text-sm text-muted">
+                  Distributors and reps serving this project&rsquo;s area.
+                </p>
+                <button
+                  onClick={requestUnlock}
+                  className="mt-4 inline-flex items-center gap-2 rounded-lg bg-teal px-5 py-2.5 text-sm font-semibold text-white hover:bg-teal-dark"
+                >
+                  Unlock project <IconArrowRight className="text-[15px]" />
+                </button>
+              </Card>
+            )}
+          </div>
         )}
       </div>
 

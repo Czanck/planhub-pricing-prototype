@@ -5,9 +5,10 @@ import { IconCheck, IconCoin, IconZap } from './icons'
 import { formatDate } from '../lib/date'
 
 const PERKS = [
-  'GC direct contact — the line to bid',
+  'GC name & direct contacts',
+  'Project location & exact address',
   'Plans & specs for takeoff',
-  'Exact project address',
+  'Suppliers & distributors',
   'Full Project Fit & Go / No-Go',
   'Ask AI about this project',
 ]
