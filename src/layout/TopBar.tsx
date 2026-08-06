@@ -1,4 +1,3 @@
-import { Link } from 'react-router-dom'
 import { BalanceWidget } from './BalanceWidget'
 import { ResearcherPanel } from '../components/ResearcherPanel'
 import { COMPANY } from '../data/company'
@@ -18,13 +17,6 @@ export function TopBar() {
       </nav>
 
       <div className="ml-auto flex items-center gap-2.5">
-        <Link
-          to="/membership"
-          className="hidden rounded-full bg-gold/90 px-3 py-1.5 text-xs font-semibold text-white hover:brightness-95 sm:inline-block"
-        >
-          Pricing
-        </Link>
-
         <BalanceWidget />
 
         <span className="mx-0.5 hidden h-6 w-px bg-white/10 sm:block" />
