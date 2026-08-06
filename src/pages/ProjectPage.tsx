@@ -141,13 +141,13 @@ function GcAndUnlock({
           >
             {isSub
               ? `Unlock this project — 1 of ${s.capacity}`
-              : 'Unlock this project — 1 credit'}
+              : 'Unlock this project — 1 unlock'}
             <IconArrowRight className="text-[15px]" />
           </button>
           <p className="mt-2 text-center text-xs text-muted">
             {isSub
               ? `You'll have ${Math.max(0, s.remaining - 1)} unlocks left this month`
-              : `${s.remaining} credits left · 1 per unlock`}
+              : `${s.remaining} unlocks left`}
           </p>
         </div>
       )}

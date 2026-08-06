@@ -53,14 +53,14 @@ export function ZeroBalanceModal({ onClose }: { onClose: () => void }) {
             <div className="flex h-11 w-11 items-center justify-center rounded-full bg-gold-50 text-gold">
               <IconCoin className="text-[20px]" />
             </div>
-            <h3 className="mt-3 text-xl font-bold text-ink">You&rsquo;re out of credits</h3>
+            <h3 className="mt-3 text-xl font-bold text-ink">You&rsquo;re out of unlocks</h3>
             <p className="mt-2 text-sm text-muted">
-              No subscription here — just buy more credits to keep unlocking. Credits never expire.
+              No subscription here — just buy more unlocks to keep going. Unlocks never expire.
             </p>
             <div className="mt-4 flex items-center justify-between rounded-xl border border-teal/30 bg-teal-50 p-3">
               <div>
                 <div className="font-semibold text-ink">
-                  {featured.name} · {featured.credits} credits
+                  {featured.name} · {featured.credits} unlocks
                 </div>
                 <div className="text-sm text-muted">
                   {currency(featured.price)} · {currency2(featured.perUnit)}/unlock
@@ -80,7 +80,7 @@ export function ZeroBalanceModal({ onClose }: { onClose: () => void }) {
               onClick={() => nav('/membership')}
               className="mt-3 flex w-full items-center justify-center gap-2 rounded-lg border border-line px-4 py-2.5 text-sm font-semibold hover:bg-canvas"
             >
-              See all credit packs <IconArrowRight className="text-[15px]" />
+              See all unlock packs <IconArrowRight className="text-[15px]" />
             </button>
           </>
         )}

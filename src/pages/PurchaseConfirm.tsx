@@ -17,11 +17,11 @@ export function PurchaseConfirm() {
   const pack = kind === 'pack' ? PACKS.find((p) => p.id === id) : undefined
   if (!tier && !pack) return <Navigate to="/membership" replace />
 
-  const title = tier ? `${tier.name} plan` : `${pack!.name} — ${pack!.credits} credits`
+  const title = tier ? `${tier.name} plan` : `${pack!.name} — ${pack!.credits} unlocks`
   const price = tier ? `${currency(tier.priceMo)} / month` : currency(pack!.price)
   const detail = tier
     ? `${tier.projectsMo} project unlocks each month, roam anywhere.`
-    : `${pack!.credits} project unlocks added to your balance. Credits never expire.`
+    : `${pack!.credits} project unlocks added to your balance. Unlocks never expire.`
 
   function complete() {
     if (tier) s.upgradeTier(tier.id)
@@ -54,7 +54,7 @@ export function PurchaseConfirm() {
               onClick={complete}
               className="flex-1 rounded-lg bg-teal px-4 py-2.5 text-sm font-semibold text-white hover:bg-teal-dark"
             >
-              {tier ? 'Complete purchase' : `Buy ${pack!.credits} credits`}
+              {tier ? 'Complete purchase' : `Buy ${pack!.credits} unlocks`}
             </button>
             <button
               onClick={() => nav('/membership')}
@@ -70,17 +70,17 @@ export function PurchaseConfirm() {
             <IconCheck className="text-[24px]" />
           </div>
           <h1 className="mt-3 text-2xl font-bold text-ink">
-            {tier ? `You're on ${tier.name}` : 'Credits added'}
+            {tier ? `You're on ${tier.name}` : 'Unlocks added'}
           </h1>
           <p className="mt-1 text-muted">
             {tier
               ? `${tier.projectsMo} project unlocks available this month.`
-              : `Your balance is now ${s.remaining} credits — they never expire.`}
+              : `Your balance is now ${s.remaining} unlocks — they never expire.`}
           </p>
 
           <div className="mt-5 inline-flex items-center gap-2 rounded-xl bg-canvas px-5 py-3">
             <span className="text-sm text-muted">
-              {tier ? 'Projects left this month' : 'Credit balance'}
+              {tier ? 'Projects left this month' : 'Unlock balance'}
             </span>
             <span className="text-lg font-bold text-ink">
               {tier ? `${s.remaining} of ${s.capacity}` : s.remaining}

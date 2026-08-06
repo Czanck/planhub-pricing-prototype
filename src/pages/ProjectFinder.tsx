@@ -19,7 +19,7 @@ const SORTED = [...PROJECTS].sort((a, b) => a.distanceMi - b.distanceMi)
 
 function costHint(concept: string, capacity: number | null, remaining: number): string {
   if (concept === 'subscription') return `Uses 1 of your ${capacity} monthly projects`
-  return `Costs 1 credit · ${remaining} left`
+  return `Costs 1 unlock · ${remaining} left`
 }
 
 function PreviewPanel({ project }: { project: Project }) {

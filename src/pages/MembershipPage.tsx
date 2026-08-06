@@ -115,7 +115,7 @@ function PackGrid() {
           <div className="mt-1 flex items-center gap-2">
             <IconCoin className="text-[22px] text-gold" />
             <span className="text-2xl font-bold text-ink">{s.remaining}</span>
-            <span className="text-muted">credits · never expire</span>
+            <span className="text-muted">unlocks · never expire</span>
           </div>
           <div className="mt-1 text-sm text-muted">
             No subscription — you only pay for the projects you choose to unlock.
@@ -140,7 +140,7 @@ function PackGrid() {
             <div className="text-sm font-semibold text-muted">{p.name}</div>
             <div className="mt-2 flex items-baseline gap-1.5">
               <span className="text-3xl font-bold text-ink">{p.credits}</span>
-              <span className="text-muted">credits</span>
+              <span className="text-muted">unlocks</span>
             </div>
             <div className="mt-3 text-2xl font-bold text-ink">{currency(p.price)}</div>
             <div className="text-sm text-muted">{currency2(p.perUnit)} / unlock</div>
@@ -158,14 +158,14 @@ function PackGrid() {
               onClick={() => nav(`/purchase?kind=pack&id=${p.id}`)}
               className="mt-5 rounded-lg bg-teal py-2.5 text-center text-sm font-semibold text-white hover:bg-teal-dark"
             >
-              Buy credits
+              Buy unlocks
             </button>
           </div>
         ))}
       </div>
 
       <p className="mt-4 text-sm text-muted">
-        Credits never expire and roll over — buy once, use whenever. The bigger the pack, the less
+        Unlocks never expire and roll over — buy once, use whenever. The bigger the pack, the less
         you pay per unlock.
       </p>
     </>
@@ -177,12 +177,12 @@ export function MembershipPage() {
   return (
     <div className="p-6">
       <h1 className="text-2xl font-bold">
-        {concept === 'subscription' ? 'Choose your plan' : 'Buy project credits'}
+        {concept === 'subscription' ? 'Choose your plan' : 'Buy project unlocks'}
       </h1>
       <p className="mt-1 text-muted">
         {concept === 'subscription'
           ? 'A set number of project unlocks each month — roam anywhere.'
-          : 'No subscription — buy credits and spend one to unlock any project. Credits never expire.'}
+          : 'No subscription — buy unlocks and spend one per project. Unlocks never expire.'}
       </p>
       <div className="mt-5">{concept === 'subscription' ? <TierLadder /> : <PackGrid />}</div>
     </div>

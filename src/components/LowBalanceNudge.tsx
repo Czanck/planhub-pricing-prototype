@@ -22,8 +22,8 @@ export function LowBalanceNudge() {
           </>
         ) : (
           <>
-            Only <b>{s.remaining} credit{s.remaining === 1 ? '' : 's'}</b> left. Buy more to keep
-            unlocking.
+            Only <b>{s.remaining} unlock{s.remaining === 1 ? '' : 's'}</b> left. Buy more to keep
+            going.
           </>
         )}
       </span>

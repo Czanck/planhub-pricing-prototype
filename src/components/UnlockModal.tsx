@@ -66,8 +66,8 @@ export function UnlockModal({
               </>
             ) : (
               <>
-                <div className="font-semibold text-ink">Spends 1 credit</div>
-                <div className="text-muted">{after} credits left after this</div>
+                <div className="font-semibold text-ink">Spends 1 unlock</div>
+                <div className="text-muted">{after} unlocks left after this</div>
               </>
             )}
           </div>

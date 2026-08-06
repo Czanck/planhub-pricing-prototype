@@ -37,7 +37,7 @@ export function ResearcherPanel() {
       hint:
         s.concept === 'subscription'
           ? `${START.subscriptionAllotment} of ${START.subscriptionAllotment}`
-          : `${START.prepaidBalance} credits`,
+          : `${START.prepaidBalance} unlocks`,
     },
     { id: 'low', label: `Low · ${START.scriptedRemaining}`, hint: 'scripted moment' },
     { id: 'zero', label: 'Zero', hint: 'out of unlocks' },
@@ -80,7 +80,7 @@ export function ResearcherPanel() {
 
         <div className="mt-4">
           <div className="text-xs font-semibold text-muted uppercase">
-            {s.concept === 'subscription' ? 'Projects remaining' : 'Credit balance'}
+            {s.concept === 'subscription' ? 'Projects remaining' : 'Unlock balance'}
           </div>
           <div className="mt-1.5 grid grid-cols-3 gap-1.5">
             {presets.map((p) => (

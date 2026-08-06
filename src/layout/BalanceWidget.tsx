@@ -55,7 +55,7 @@ export function BalanceWidget() {
         ) : (
           <>
             <IconCoin className="text-[16px] text-gold" />
-            <span className="font-semibold whitespace-nowrap">{s.remaining} credits</span>
+            <span className="font-semibold whitespace-nowrap">{s.remaining} unlocks</span>
           </>
         )}
         <IconChevronDown className="text-[13px] text-white/60" />
@@ -118,13 +118,13 @@ export function BalanceWidget() {
             ) : (
               <div>
                 <div className="flex items-center justify-between">
-                  <span className="text-sm font-semibold">Prepaid credits</span>
+                  <span className="text-sm font-semibold">Prepaid unlocks</span>
                   <span className="inline-flex items-center gap-1 text-xs text-muted">
-                    <IconCoin className="text-[13px] text-gold" /> credits
+                    <IconCoin className="text-[13px] text-gold" /> unlocks
                   </span>
                 </div>
                 <div className="mt-2 text-3xl font-bold text-ink">{s.remaining}</div>
-                <p className="text-sm text-muted">≈ {s.remaining} project unlocks · never expire</p>
+                <p className="text-sm text-muted">Project unlocks · never expire</p>
                 <dl className="mt-3 space-y-1 text-sm text-muted">
                   <div className="flex justify-between">
                     <dt>Spent all-time</dt>

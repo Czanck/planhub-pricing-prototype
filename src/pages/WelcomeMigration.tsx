@@ -88,7 +88,7 @@ export function WelcomeMigration() {
               <p className="mt-2 text-sm font-medium text-ink">
                 {isSub
                   ? `In this concept you get ${START.subscriptionAllotment} project unlocks each month.`
-                  : `In this concept you buy credits and spend one to unlock any project — they never expire, and you buy more whenever you like.`}
+                  : `In this concept you buy project unlocks and spend one per project — they never expire, and you buy more whenever you like.`}
               </p>
             </div>
           </div>
@@ -99,7 +99,7 @@ export function WelcomeMigration() {
             onClick={goPlans}
             className="inline-flex items-center gap-2 rounded-lg bg-teal px-5 py-2.5 text-sm font-semibold text-white hover:bg-teal-dark"
           >
-            See the {isSub ? 'plans' : 'credit packs'} <IconArrowRight className="text-[15px]" />
+            See the {isSub ? 'plans' : 'unlock packs'} <IconArrowRight className="text-[15px]" />
           </button>
           <button
             onClick={goFinder}
